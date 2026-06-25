@@ -1,5 +1,5 @@
 use crate::layout::GridLayout;
-use crate::sexpr::{parse as parse_sexpr, Sexp, ParseError};
+use crate::sexpr::{ParseError, Sexp, parse as parse_sexpr};
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -17,8 +17,14 @@ pub struct DefSrc {
 
 #[derive(Debug)]
 pub enum Layer {
-    Full { name: String, keys: Vec<String> },
-    Sparse { name: String, map: HashMap<String, String> },
+    Full {
+        name: String,
+        keys: Vec<String>,
+    },
+    Sparse {
+        name: String,
+        map: HashMap<String, String>,
+    },
 }
 
 pub fn parse(source: &str, platform: &str) -> Result<Model, ParseError> {

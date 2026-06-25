@@ -1,4 +1,4 @@
-use crate::sexpr::{parse as parse_sexpr, Sexp};
+use crate::sexpr::{Sexp, parse as parse_sexpr};
 use std::collections::HashMap;
 
 #[derive(Debug, Clone)]

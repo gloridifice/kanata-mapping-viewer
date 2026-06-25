@@ -4,7 +4,7 @@ version = "0.1.0"
 edition.workspace = true
 
 [[bin]]
-name = "kanata-viewer"
+name = "kanata-mapping-viewer"
 path = "src/main.rs"
 
 [dependencies]

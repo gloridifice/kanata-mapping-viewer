@@ -69,7 +69,5 @@ fn main() -> ExitCode {
 }
 
 fn print_help() {
-    eprintln!(
-        "kanata-viewer <input.kbd> [-o output.html] [--platform win|linux|macos]"
-    );
+    eprintln!("kanata-viewer <input.kbd> [-o output.html] [--platform win|linux|macos]");
 }

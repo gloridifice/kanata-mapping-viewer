@@ -7,9 +7,9 @@ pub mod sexpr;
 
 pub use display::{DefaultDisplay, DisplayContext, DisplayResult, KeyDisplay};
 pub use layout::{GridCell, GridLayout};
-pub use parser::{parse, DefSrc, Layer, Model};
-pub use preprocess::{preprocess, PreprocessError};
-pub use render::{render_fragment, render_full_html, CSS};
+pub use parser::{DefSrc, Layer, Model, parse};
+pub use preprocess::{PreprocessError, preprocess};
+pub use render::{CSS, render_fragment, render_full_html};
 
 use std::path::Path;
 

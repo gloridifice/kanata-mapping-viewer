@@ -65,12 +65,13 @@ pub fn compute_layout(source: &str, key_spans: &[Span]) -> GridLayout {
     }
     let cells: Vec<GridCell> = cells_by_index.into_iter().map(Option::unwrap).collect();
 
-    let n_rows = cells.iter().map(|c| c.row).max().map(|r| r + 1).unwrap_or(0);
-    let n_cols = cells
+    let n_rows = cells
         .iter()
-        .map(|c| c.col + c.colspan)
+        .map(|c| c.row)
         .max()
+        .map(|r| r + 1)
         .unwrap_or(0);
+    let n_cols = cells.iter().map(|c| c.col + c.colspan).max().unwrap_or(0);
 
     GridLayout {
         cells,

@@ -144,10 +144,7 @@ fn render_key(
         span = gc.colspan.max(1),
         row = gc.row + 1
     ));
-    html.push_str(&format!(
-        "<span class=\"label\">{}</span>",
-        esc(&res.label)
-    ));
+    html.push_str(&format!("<span class=\"label\">{}</span>", esc(&res.label)));
     if let Some(tip) = &res.tooltip {
         html.push_str(&format!("<span class=\"tooltip\">{}</span>", esc(tip)));
     }

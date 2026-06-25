@@ -36,20 +36,17 @@ fn preprocess_into(
     out: &mut String,
     stack: &mut Vec<PathBuf>,
 ) -> Result<(), PreprocessError> {
-    let canonical = path
-        .canonicalize()
-        .unwrap_or_else(|_| path.to_path_buf());
+    let canonical = path.canonicalize().unwrap_or_else(|_| path.to_path_buf());
     if stack.contains(&canonical) {
         return Err(PreprocessError {
             path: canonical,
             kind: PreprocessKind::Cyclic,
         });
     }
-    let content =
-        fs::read_to_string(path).map_err(|e| PreprocessError {
-            path: path.to_path_buf(),
-            kind: PreprocessKind::Io(e),
-        })?;
+    let content = fs::read_to_string(path).map_err(|e| PreprocessError {
+        path: path.to_path_buf(),
+        kind: PreprocessKind::Io(e),
+    })?;
     stack.push(canonical);
     scan_and_substitute(&content, path, out, stack)?;
     stack.pop();
