@@ -56,7 +56,6 @@ jobs:
           New-Item -ItemType Directory -Path staging | Out-Null
           Copy-Item "target/${{ matrix.target }}/release/kanata-mapping-viewer.exe" staging/
           Copy-Item README.md staging/
-          Copy-Item kanata staging/ -Recurse
           Compress-Archive -Path staging/* -DestinationPath "kanata-mapping-viewer-${{ matrix.target }}.zip"
 
       - uses: actions/upload-artifact@v4
