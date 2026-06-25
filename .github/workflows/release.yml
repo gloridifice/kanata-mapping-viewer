@@ -47,7 +47,6 @@ jobs:
           mkdir -p staging
           cp target/${{ matrix.target }}/release/kanata-mapping-viewer staging/
           cp README.md staging/
-          cp -r kanata staging/
           tar -czf kanata-mapping-viewer-${{ matrix.target }}.tar.gz -C staging .
 
       - name: Package (windows)
