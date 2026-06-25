@@ -1,5 +1,5 @@
 [package]
-name = "kanata-viewer-cli"
+name = "kanata-mapping-viewer-cli"
 version = "0.1.0"
 edition.workspace = true
 
