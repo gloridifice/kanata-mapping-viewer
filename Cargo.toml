@@ -6,4 +6,4 @@ members = ["crates/core", "crates/cli"]
 edition = "2024"
 
 [workspace.dependencies]
-kanata-viewer-core = { path = "crates/core" }
+kanata-mapping-viewer-core = { path = "crates/core" }
