@@ -1,0 +1,106 @@
+:root {
+  --bg: #1a1a2e;
+  --panel: #2d2d44;
+  --border: #3d3d5c;
+  --text: #e0e0e0;
+  --muted: #666;
+  --accent: #8be9fd;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 24px;
+}
+
+.viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.keyboard h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  gap: 4px;
+}
+
+.key {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 4px;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  position: relative;
+  overflow: visible;
+  user-select: none;
+}
+
+.key .label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+.key.passthrough {
+  background: #1e1e30;
+  color: var(--muted);
+  border-style: dashed;
+}
+
+.key.alias {
+  background: #2d4d44;
+  border-color: #3d6d5c;
+}
+
+.key.unicode {
+  background: #4d2d44;
+  border-color: #6d3d5c;
+}
+
+.key.sexpr {
+  background: #3d2d4d;
+  border-color: #5d3d6d;
+}
+
+.key:hover {
+  z-index: 10;
+}
+
+.key .tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  white-space: pre;
+  max-width: 420px;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.key:hover .tooltip {
+  display: block;
+}

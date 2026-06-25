@@ -1,0 +1,11 @@
+[package]
+name = "kanata-viewer-cli"
+version = "0.1.0"
+edition.workspace = true
+
+[[bin]]
+name = "kanata-viewer"
+path = "src/main.rs"
+
+[dependencies]
+kanata-viewer-core.workspace = true

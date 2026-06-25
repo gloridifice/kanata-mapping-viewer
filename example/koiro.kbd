@@ -1,0 +1,232 @@
+(include modifier.kbd)
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+  esc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+(defalias
+  held-symbol-layer (layer-while-held symbol)
+  held-cn-symbol-layer (layer-while-held cn-symbol)
+  held-altaction-layer (layer-while-held altaction)
+  held-shift-layer (layer-while-held shift)
+  held-osmain-sft-layer (layer-while-held osmain-sft)
+  held-osalt-layer (layer-while-held osalt)  
+  held-num-layer (layer-while-held num)  
+  held-fn-layer (layer-while-held fn)  
+  held-lineaction-layer (layer-while-held lineaction)
+  held-osmain-fn-layer (layer-while-held osmain-fn)
+
+  ;; Base Layer
+  f (tap-hold-release 200 200 f (layer-while-held lcommand))
+  d (tap-hold-release 200 200 d @held-shift-layer)
+  s (tap-hold-release 200 200 s @held-osalt-layer)
+  a (tap-hold-release 200 200 a (one-shot 2000 @losmet))
+  e (tap-hold-release 200 200 e @held-altaction-layer) 
+  w (tap-hold-release 200 200 w @held-num-layer) 
+  r (tap-hold-release 200 200 r @held-lineaction-layer) 
+  q (tap-hold-release 200 200 q @held-fn-layer) 
+
+  j (tap-hold-release 200 200 j (layer-while-held rcommand))
+  k (tap-hold-release 200 200 k @held-shift-layer)
+  l (tap-hold-release 200 200 l @held-osalt-layer)
+  ; (tap-hold-release 200 200 ret (one-shot 2000 @losmet))
+  i (tap-hold-release 200 200 i @held-altaction-layer) 
+
+  capi (tap-hold-release 200 200 (layer-switch capital) lsft)
+
+  spc (tap-hold-release 200 200 spc @held-symbol-layer)
+
+  caps (tap-hold-release 200 200 esc (one-shot 2000 @losmain))
+
+  ls-sft-game (fork esc (layer-switch game) (lshift rshift))
+  ls-sft-base (fork esc (layer-switch base) (lshift rshift))
+
+
+  ;; Command Layer
+  msft @held-osmain-sft-layer
+  msft-d (tap-hold-release 200 200 @m_d @held-osmain-sft-layer) 
+  msft-k (tap-hold-release 200 200 @m_k @held-osmain-sft-layer) 
+
+  mfn-q (tap-hold-release 200 200 @m_q @held-osmain-fn-layer) 
+  m-spec-cn-symbol (tap-hold-release 200 200 @m_spc @held-cn-symbol-layer)
+
+  ;; Layer Switch
+  ls-base (layer-switch base)
+  ls-game (layer-switch game)
+  ls-cap (layer-switch capital)
+  ret-ls-base (multi ret @ls-base)
+)
+
+
+(deflayer base
+  esc   @ls-game 1     2     3     4     5     6     7     8     9     0     -     =     bspc
+  tab   @q       @w    @e    @r    t     y     u     @i    o     p     @capi @lang \
+  @caps @a       @s    @d    @f    g     h     @j    @k    @l    @;    S-;   ret
+  lsft  z        x     c     v     b     n     m     ,     .     /     rsft
+  lctl  @lalt    @lang             @spc                    ralt  rmet  rctl
+)
+
+(deflayer game
+  esc      @ls-base 1     2     3     4     5     6     7     8     9     0     -     =     bspc
+  tab      q        w     e     r     t     y     u     i     o     p     [     ]     \
+  @losmain a        s     d     f     g     h     j     k     l     ;     '     ret
+  lsft     z        x     c     v     b     n     m     ,     .     /     rsft
+  lctl     @lalt    @lang             spc                     ralt  rmet  rctl
+)
+
+(deflayer shift
+  @ls-base
+  S-grv  S-1    S-2    S-3    S-4    S-5    S-6    S-7    S-8    S-9    S-0    S--    S-=    S-bspc
+  S-tab  S-q    S-w    S-e    S-r    S-t    S-y    S-u    S-i    S-o    S-p    S-[    S-]    S-\
+  caps   S-a    S-s    S-d    S-f    S-g    S-h    S-j    S-k    S-l    S-ret    S-'    S-ret 
+  lsft   S-z    S-x    S-c    S-v    S-b    S-n    S-m    S-,    S-.    S-/    rsft
+  lctl   lmet   lalt           tab              ralt   rmet   rctl
+)
+
+(deflayer capital
+  @ls-base
+  grv      1      2      3      4      5      6      7      8      9      0             S--    =    bspc
+  tab      S-q    S-w    S-e    S-r    S-t    S-y    S-u    S-i    S-o    S-p           @ls-base      ]    \
+  @ls-base S-a    S-s    S-d    S-f    S-g    S-h    S-j    S-k    S-l    @ret-ls-base  '      @ret-ls-base
+  lsft     S-z    S-x    S-c    S-v    S-b    S-n    S-m    ,      .      /             rsft
+  lctl     lmet   lalt           (multi @ls-base spc)                         ralt   rmet   rctl
+)
+
+;; Enter osmain-sft layer when press f-d
+(deflayer lcommand
+  esc
+  @m_grv  @m_1    @m_2    @m_3    @m_4    @m_5    @m_6    @m_7    @m_8    @m_9    @m_0    @m_-    @m_=    @m_bspc
+  @m_tab  @mfn-q  @m_w    @m_e    @m_r    @m_t    @m_y    @m_u    @m_i    @m_o    @m_p    @m_[    @m_]    @m_\
+  caps    @m_a    @m_s    @msft-d @m_f    @m_g    left    down    up      right   @m_;    @m_'    @m_ret
+  lsft    @m_z    @m_x    @m_c    @m_v    @m_b    @m_n    esc     @m_,    @m_.    @m_/    rsft
+  lctl    lalt    @lang           @m-spec-cn-symbol                          ralt    rmet    rctl
+)
+
+;; Enter osmain-sft layer when press f-k
+(deflayer rcommand
+  esc
+  @m_grv  @m_1    @m_2    @m_3    @m_4    @m_5    @m_6    @m_7    @m_8    @m_9    @m_0    @m_-    @m_=    @m_bspc
+  @m_tab  @mfn-q  @m_w    @m_e    @m_r    @m_t    @m_y    @m_u    @m_i    @m_o    @m_p    @m_[    @m_]    @m_\
+  caps    @m_a    @m_s    @m_d    @m_f    @m_g    @m_h    @m_j    @msft-k @m_l    @m_;    @m_'    @m_ret
+  lsft    @m_z    @m_x    @m_c    @m_v    @m_b    @m_n    @m_m    @m_,    @m_.    @m_/    rsft
+  lctl    lalt    @lang           @m-spec-cn-symbol                          ralt    rmet    rctl
+)
+
+(deflayer symbol
+  esc
+  grv  1      2      3      4      5      6      7      8      9      0      -      =      bspc
+  tab  (unicode !)  (unicode @)  (unicode #)  (unicode $)  (unicode %)  (unicode ^)  (unicode &)  (unicode *)  (unicode _)  (unicode =)  (unicode [)       (unicode ])  (unicode \)
+  caps (unicode <)  (unicode -)  (unicode >)  (unicode {)  (unicode [)  +            (unicode ,)  (unicode .)  (unicode /)  (unicode ;)  (unicode r#"""#)  ret
+  lsft (unicode \)  (unicode |)  (unicode ?)  (unicode })  (unicode ])  S-9          S-0          (unicode `)  (unicode ~)  (unicode ')  rsft
+  lctl lalt        @lang                        bspc                        ralt       rmet       rctl
+) 
+(deflayer cn-symbol
+  esc
+  grv  1      2      3      4      5      6      7      8      9      0      -      =      bspc
+  tab  (unicode ！)  (unicode @)  (unicode #)  (unicode ￥)  (unicode ％)  (unicode …)  (unicode ＆)  (unicode ＊)  (unicode —)  (unicode ＝)  (unicode 【)       (unicode 】)  (unicode 、)
+  caps (unicode 《)  (unicode －)  (unicode 》)  (unicode ｛)  (unicode 【)  +            (unicode ，)  (unicode 。)  (unicode ／)  (unicode ；)  S-'  ret
+  lsft (unicode 、)  (unicode ｜)  (unicode ？)  (unicode ｝)  (unicode 】)  S-9          S-0          (unicode ·)  (unicode ～)    '             rsft
+  lctl lalt        @lang                        bspc                        ralt       rmet       rctl
+)
+
+
+(deflayer symbol-backup
+  esc
+  grv   1      2      3      4      5      6      7      8      9      0      -      =      bspc
+  tab   S-1    S-2    S-3    S-4    S-5    S-6    S-7    S-8    S--    =    [      ]      \
+  caps  S-,    -      S-.    S-[      [    S-=    ,      .      /      ;    S-'    ret
+  lsft  \      S-\    S-/    S-]      ]    S-9    S-0    `      S-`    '      rsft
+  lctl  lalt   @lang                  bspc                  ralt   rmet   rctl
+)
+
+
+(deflayer osmain-sft
+  esc
+  @ms_grv  @ms_1    @ms_2    @ms_3    @ms_4    @ms_5    @ms_6    @ms_7    @ms_8    @ms_9    @ms_0    @ms_-    @ms_=    @ms_bspc
+  @ms_tab  @ms_q    @ms_w    @ms_e    @ms_r    @ms_t    @ms_y    @ms_u    @ms_i    @ms_o    @ms_p    @ms_[    @ms_]    @ms_\
+  caps     @ms_a    @ms_s    @ms_d    @ms_f    @ms_g    @ms_h    @ms_j    @ms_k    @ms_l    @ms_;    @ms_'    @ms_ret
+  lsft     @ms_z    @ms_x    @ms_c    @ms_v    @ms_b    @ms_n    esc      @ms_,    @ms_.    @ms_/    rsft
+  lctl     lalt      @lang           @ms_spc                             ralt  rmet  rctl
+)
+
+(deflayer osalt
+  esc
+  @a_grv    @a_1     @a_2     @a_3     @a_4     @a_5     @a_6     @a_7     @a_8     @a_9     @a_0     @a_-     @a_=     @a_bspc
+  @a_tab    @a_q     @a_w     @a_e     @a_r     @a_t     @a_y     @a_u     @a_i     @a_o     @a_p     @a_[     @a_]     @a_\
+  caps      @a_a     @a_s     @a_d     @a_f     @a_g     @a_h     @a_j     @a_k     @a_l     @a_;     @a_'     @a_ret
+  lsft      @a_z     @a_x     @a_c     @a_v     @a_b     @a_n     @a_m     @a_,     @a_.     @a_/    rsft
+  lctl     lalt      @lang               bspc                              ralt     rmet     rctl
+)
+
+
+(deflayermap (altaction)
+  h (multi @wordmov left)
+  j PageDown
+  k PageUp
+  l (multi @wordmov right)
+
+  spc (multi @wordmov bspc)
+
+)
+
+(deflayermap (lineaction)
+  h @line-begin
+  j PageDown
+  k PageUp
+  l @line-end
+
+  spc @remove-to-line-begin
+)
+
+(deflayermap (fn)
+  h f10
+  m f1
+  , f2
+  . f3
+  j f4
+  k f5
+  l f6
+  u f7
+  i f8
+  o f9
+  p f11
+  [ f12
+)
+
+(deflayermap (osmain-fn)
+  h (multi @losmain f10)
+  m (multi @losmain f1)
+  , (multi @losmain f2)
+  . (multi @losmain f3)
+  j (multi @losmain f4)
+  k (multi @losmain f5)
+  l (multi @losmain f6)
+  u (multi @losmain f7)
+  i (multi @losmain f8)
+  o (multi @losmain f9)
+  p (multi @losmain f11)
+  [ (multi @losmain f12)
+)
+
+(deflayermap (num)
+  h 0
+  m 1
+  , 2
+  . 3
+  j 4
+  k 5
+  l 6
+  u 7
+  i 8
+  o 9
+  n .
+)
