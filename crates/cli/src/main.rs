@@ -43,7 +43,7 @@ fn main() -> ExitCode {
         return ExitCode::FAILURE;
     };
 
-    match kanata_viewer_core::render_file(&input, &platform) {
+    match kanata_mapping_viewer_core::render_file(&input, &platform) {
         Ok(html) => {
             if let Some(out) = output {
                 if let Err(e) = std::fs::write(&out, &html) {
@@ -69,5 +69,5 @@ fn main() -> ExitCode {
 }
 
 fn print_help() {
-    eprintln!("kanata-viewer <input.kbd> [-o output.html] [--platform win|linux|macos]");
+    eprintln!("kanata-mapping-viewer <input.kbd> [-o output.html] [--platform win|linux|macos]");
 }

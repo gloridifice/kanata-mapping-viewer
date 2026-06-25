@@ -8,4 +8,4 @@ name = "kanata-mapping-viewer"
 path = "src/main.rs"
 
 [dependencies]
-kanata-viewer-core.workspace = true
+kanata-mapping-viewer-core.workspace = true
