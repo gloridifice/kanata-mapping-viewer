@@ -5,6 +5,9 @@
   --text: #e0e0e0;
   --muted: #666;
   --accent: #8be9fd;
+  --key-w: 56px;
+  --key-h: 56px;
+  --grid-gap: 2px;
 }
 
 * {
@@ -38,16 +41,18 @@ body {
 
 .grid {
   display: grid;
-  gap: 4px;
+  grid-auto-columns: var(--key-w);
+  grid-auto-rows: var(--key-h);
+  gap: var(--grid-gap);
+  width: max-content;
 }
 
 .key {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
   padding: 8px 4px;
-  min-height: 42px;
-  width: 42px;
+  min-height: var(--key-h);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,8 +60,9 @@ body {
   position: relative;
   overflow: visible;
   user-select: none;
-  box-shadow: 0 4px var(--border);
+  box-shadow: none;
   transition: filter 0.1s;
+  color: #333;
 }
 
 .key:hover {

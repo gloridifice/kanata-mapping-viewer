@@ -3,8 +3,16 @@ use crate::parser::{DefSrc, Layer, Model};
 
 pub const CSS: &str = include_str!("../assets/style.css");
 
+/// Extract inner content from an SVG string (between the opening <svg...> and closing </svg>).
+fn svg_inner(svg: &str) -> &str {
+    let start = svg.find('>').map(|i| i + 1).unwrap_or(0);
+    let end = svg.rfind("</svg>").unwrap_or(svg.len());
+    &svg[start..end]
+}
+
 pub fn render_fragment(model: &Model, display: &dyn KeyDisplay) -> String {
     let mut html = String::new();
+    html.push_str("<style>.key-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}.key>*:not(.key-bg){position:relative;z-index:1;}.key.passthrough .key-bg{opacity:0.35;}.key.alias .key-bg{filter:hue-rotate(140deg);}.key.unicode .key-bg{filter:hue-rotate(280deg);}.key.sexpr .key-bg{filter:hue-rotate(220deg);}</style>");
     html.push_str("<div class=\"viewer\">");
 
     // defsrc keyboard
@@ -116,11 +124,7 @@ fn render_keyboard_cells(
     };
     html.push_str("<section class=\"keyboard\">");
     html.push_str(&format!("<h3>{}</h3>", esc(name)));
-    html.push_str(&format!(
-        "<div class=\"grid\" style=\"grid-template-columns: repeat({}, 1fr); grid-template-rows: repeat({}, auto);\">",
-        layout.n_cols.max(1),
-        layout.n_rows.max(1)
-    ));
+    html.push_str("<div class=\"grid\">");
 
     for (i, cell) in cells.iter().enumerate() {
         let Some(gc) = layout.cells.get(i) else {
@@ -154,6 +158,12 @@ fn render_key(
         span = gc.colspan.max(1),
         row = gc.row + 1
     ));
+    // Inline the keycap SVG as the key background
+    html.push_str(&format!(
+        "<svg class=\"key-bg\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" preserveAspectRatio=\"none\">{}",
+        svg_inner(crate::svgs::KEY)
+    ));
+    html.push_str("</svg>");
     html.push_str(&format!("<span class=\"label\">{}</span>", esc(&res.label)));
     if let Some(tip) = &res.tooltip {
         html.push_str(&format!("<span class=\"tooltip\">{}</span>", esc(tip)));
