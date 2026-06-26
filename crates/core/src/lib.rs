@@ -4,6 +4,7 @@ pub mod parser;
 pub mod preprocess;
 pub mod render;
 pub mod sexpr;
+pub mod svgs;
 
 pub use display::{DefaultDisplay, DisplayContext, DisplayResult, KeyDisplay};
 pub use layout::{GridCell, GridLayout};

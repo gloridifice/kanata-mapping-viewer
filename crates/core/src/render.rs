@@ -21,10 +21,20 @@ pub fn render_fragment(model: &Model, display: &dyn KeyDisplay) -> String {
 pub fn render_full_html(model: &Model, display: &dyn KeyDisplay) -> String {
     let fragment = render_fragment(model, display);
     format!(
-        "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n\
-         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\
-         <title>kanata-viewer</title>\n<style>\n{css}</style>\n</head>\n<body>\n{body}\n</body>\n</html>\n",
-        css = CSS,
+        r#"
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./crates/core/assets/style.css">
+        <title>kanata-viewer</title>
+    </head>
+    <body>
+        {body}
+    </body>
+</html>
+"#,
         body = fragment
     )
 }
