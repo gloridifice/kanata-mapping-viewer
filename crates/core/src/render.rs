@@ -152,10 +152,9 @@ fn render_key(
         classes.push_str("passthrough");
     }
     html.push_str(&format!(
-        "<div class=\"key {classes}\" style=\"grid-column: {col} / span {span}; grid-row: {row};\">",
+        "<div class=\"key {classes}\" style=\"grid-column: {col}; grid-row: {row};\">",
         classes = classes.trim(),
         col = gc.col + 1,
-        span = gc.colspan.max(1),
         row = gc.row + 1
     ));
     // Inline the keycap SVG as the key background

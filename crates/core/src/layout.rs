@@ -4,7 +4,6 @@ use crate::sexpr::Span;
 pub struct GridCell {
     pub row: usize,
     pub col: usize,
-    pub colspan: usize,
 }
 
 #[derive(Debug, Clone)]
@@ -25,21 +24,19 @@ pub fn compute_layout(source: &str, key_spans: &[Span]) -> GridLayout {
 
     let line_starts = compute_line_starts(source);
 
-    // absolute (line, char_col) per key
+    // (line, char_col) per key
     let mut positions: Vec<(usize, usize)> = key_spans
         .iter()
         .map(|s| byte_to_line_col(source, &line_starts, s.start))
         .collect();
 
-    // normalize: subtract min row and min col
+    // normalize rows to start at 0
     let min_row = positions.iter().map(|(r, _)| *r).min().unwrap_or(0);
-    let min_col = positions.iter().map(|(_, c)| *c).min().unwrap_or(0);
     for pos in positions.iter_mut() {
         pos.0 -= min_row;
-        pos.1 -= min_col;
     }
 
-    // group by row to compute colspan = next key's col - this col (last in row = 1)
+    // group by row; within each row, sort by char_col and assign consecutive col indices
     let mut cells_by_index: Vec<Option<GridCell>> = vec![None; key_spans.len()];
     let mut row_buckets: std::collections::BTreeMap<usize, Vec<(usize, usize)>> =
         std::collections::BTreeMap::new();
@@ -47,19 +44,14 @@ pub fn compute_layout(source: &str, key_spans: &[Span]) -> GridLayout {
         row_buckets.entry(*r).or_default().push((*c, i));
     }
 
+    let mut n_cols = 0usize;
     for (_, mut bucket) in row_buckets {
         bucket.sort_by_key(|(c, _)| *c);
-        for j in 0..bucket.len() {
-            let (col, idx) = bucket[j];
-            let colspan = if j + 1 < bucket.len() {
-                bucket[j + 1].0.saturating_sub(col).max(1)
-            } else {
-                1
-            };
+        n_cols = n_cols.max(bucket.len());
+        for (col, &(_, idx)) in bucket.iter().enumerate() {
             cells_by_index[idx] = Some(GridCell {
                 row: positions[idx].0,
                 col,
-                colspan,
             });
         }
     }
@@ -71,7 +63,6 @@ pub fn compute_layout(source: &str, key_spans: &[Span]) -> GridLayout {
         .max()
         .map(|r| r + 1)
         .unwrap_or(0);
-    let n_cols = cells.iter().map(|c| c.col + c.colspan).max().unwrap_or(0);
 
     GridLayout {
         cells,

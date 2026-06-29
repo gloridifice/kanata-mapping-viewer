@@ -5,8 +5,7 @@
   --text: #e0e0e0;
   --muted: #666;
   --accent: #8be9fd;
-  --key-w: 56px;
-  --key-h: 56px;
+  --key-size: 48px;
   --grid-gap: 2px;
 }
 
@@ -41,18 +40,17 @@ body {
 
 .grid {
   display: grid;
-  grid-auto-columns: var(--key-w);
-  grid-auto-rows: var(--key-h);
+  grid-template-columns: repeat(auto-fill, var(--key-size));
+  grid-template-rows: repeat(auto-fill, var(--key-size));
   gap: var(--grid-gap);
-  width: max-content;
 }
 
 .key {
   background-color: transparent;
+  height: var(--key-size);
   border: none;
   border-radius: 0;
   padding: 8px 4px;
-  min-height: var(--key-h);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,11 +68,16 @@ body {
 }
 
 .key .label {
+  position: relative;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
   text-align: center;
+}
+
+.key svg {
+  width: var(--key-size);
+  height: var(--key-size);
 }
 
 .key.passthrough {
