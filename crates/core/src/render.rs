@@ -36,7 +36,10 @@ pub fn render_full_html(model: &Model, display: &dyn KeyDisplay) -> String {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="./crates/core/assets/style.css">
-        <title>kanata-viewer</title>
+        <title>Kanata Mapping Viewer</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     </head>
     <body>
         {body}
@@ -152,11 +155,16 @@ fn render_key(
         classes.push_str("passthrough");
     }
     html.push_str(&format!(
-        "<div class=\"key {classes}\" style=\"grid-column: {col}; grid-row: {row};\">",
+        "<div class=\"key {classes}\" style=\"grid-row: {row};\">",
         classes = classes.trim(),
-        col = gc.col + 1,
         row = gc.row + 1
     ));
+    // html.push_str(&format!(
+    //     "<div class=\"key {classes}\" style=\"grid-column: {col}; grid-row: {row};\">",
+    //     classes = classes.trim(),
+    //     col = gc.col + 1,
+    //     row = gc.row + 1
+    // ));
     // Inline the keycap SVG as the key background
     html.push_str(&format!(
         "<svg class=\"key-bg\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" preserveAspectRatio=\"none\">{}",
