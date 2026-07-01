@@ -9,3 +9,4 @@ path = "src/main.rs"
 
 [dependencies]
 kanata-mapping-viewer-core.workspace = true
+clap.workspace = true

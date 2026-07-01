@@ -7,3 +7,4 @@ edition = "2024"
 
 [workspace.dependencies]
 kanata-mapping-viewer-core = { path = "crates/core" }
+clap = { version = "4", features = ["derive"] }
