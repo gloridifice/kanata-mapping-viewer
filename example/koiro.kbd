@@ -66,7 +66,7 @@
   ret-ls-base (multi ret @ls-base)
 )
 
-
+;; name: Base
 (deflayer base
   esc   @ls-game 1     2     3     4     5     6     7     8     9     0     -     =     bspc
   tab   @q       @w    @e    @r    t     y     u     @i    o     p     @capi @lang \
@@ -75,6 +75,7 @@
   lctl  @lalt    @lang             @spc                    ralt  rmet  rctl
 )
 
+;; name: Game
 (deflayer game
   esc      @ls-base 1     2     3     4     5     6     7     8     9     0     -     =     bspc
   tab      q        w     e     r     t     y     u     i     o     p     [     ]     \
@@ -83,6 +84,7 @@
   lctl     @lalt    @lang             spc                     ralt  rmet  rctl
 )
 
+;; name: Shift
 (deflayer shift
   @ls-base
   S-grv  S-1    S-2    S-3    S-4    S-5    S-6    S-7    S-8    S-9    S-0    S--    S-=    S-bspc
@@ -92,6 +94,8 @@
   lctl   lmet   lalt           tab              ralt   rmet   rctl
 )
 
+;; name: Capital
+;; desc: press [ then
 (deflayer capital
   @ls-base
   grv      1      2      3      4      5      6      7      8      9      0             S--    =    bspc
@@ -101,7 +105,8 @@
   lctl     lmet   lalt           (multi @ls-base spc)                         ralt   rmet   rctl
 )
 
-;; Enter osmain-sft layer when press f-d
+;; name: Cmd 
+;; desc: Enter osmain-sft layer when press f-d
 (deflayer lcommand
   esc
   @m_grv  @m_1    @m_2    @m_3    @m_4    @m_5    @m_6    @m_7    @m_8    @m_9    @m_0    @m_-    @m_=    @m_bspc
@@ -111,7 +116,8 @@
   lctl    lalt    @lang           @m-spec-cn-symbol                          ralt    rmet    rctl
 )
 
-;; Enter osmain-sft layer when press f-k
+;; name: Cmd
+;; desc: Enter osmain-sft layer when press f-k
 (deflayer rcommand
   esc
   @m_grv  @m_1    @m_2    @m_3    @m_4    @m_5    @m_6    @m_7    @m_8    @m_9    @m_0    @m_-    @m_=    @m_bspc

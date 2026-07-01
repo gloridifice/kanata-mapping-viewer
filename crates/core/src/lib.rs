@@ -15,10 +15,10 @@ pub use render::{CSS, render_fragment, render_full_html};
 use std::path::Path;
 
 /// Full pipeline: read file (with includes), parse, render HTML document.
-pub fn render_file(path: &Path, platform: &str) -> Result<String, Error> {
+pub fn render_file(path: &Path, platform: &str, is_dev_mode: bool) -> Result<String, Error> {
     let source = preprocess(path).map_err(Error::Preprocess)?;
     let model = parse(&source, platform).map_err(Error::Parse)?;
-    Ok(render_full_html(&model, &DefaultDisplay))
+    Ok(render_full_html(&model, &DefaultDisplay, is_dev_mode))
 }
 
 #[derive(Debug)]

@@ -7,11 +7,16 @@ fn main() -> ExitCode {
     let mut input: Option<PathBuf> = None;
     let mut output: Option<PathBuf> = None;
     let mut platform = String::from("win");
+    let mut is_dev_mode = false;
 
     let mut i = 1;
     while i < args.len() {
         let a = &args[i];
         match a.as_str() {
+            "-d" | "--dev" => {
+                i += 1;
+                is_dev_mode = true;
+            }
             "-o" | "--output" => {
                 i += 1;
                 output = args.get(i).map(PathBuf::from);
@@ -43,7 +48,7 @@ fn main() -> ExitCode {
         return ExitCode::FAILURE;
     };
 
-    match kanata_mapping_viewer_core::render_file(&input, &platform) {
+    match kanata_mapping_viewer_core::render_file(&input, &platform, is_dev_mode) {
         Ok(html) => {
             if let Some(out) = output {
                 if let Err(e) = std::fs::write(&out, &html) {

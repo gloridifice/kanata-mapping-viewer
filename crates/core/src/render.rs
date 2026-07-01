@@ -16,7 +16,7 @@ pub fn render_fragment(model: &Model, display: &dyn KeyDisplay) -> String {
     html.push_str("<div class=\"viewer\">");
 
     // defsrc keyboard
-    render_keyboard("defsrc", &model.src, model, display, &mut html);
+    render_keyboard(&model.src, model, display, &mut html);
 
     for layer in &model.layers {
         render_layer(layer, &model.src, model, display, &mut html);
@@ -26,8 +26,13 @@ pub fn render_fragment(model: &Model, display: &dyn KeyDisplay) -> String {
     html
 }
 
-pub fn render_full_html(model: &Model, display: &dyn KeyDisplay) -> String {
+pub fn render_full_html(model: &Model, display: &dyn KeyDisplay, is_dev_mode: bool) -> String {
     let fragment = render_fragment(model, display);
+    let style = if is_dev_mode {
+        r#"<link rel="stylesheet" href="./crates/core/assets/style.css">"#
+    } else {
+        include_str!("../assets/style.css")
+    };
     format!(
         r#"
 <!DOCTYPE html>
@@ -35,7 +40,7 @@ pub fn render_full_html(model: &Model, display: &dyn KeyDisplay) -> String {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="./crates/core/assets/style.css">
+        {style}
         <title>Kanata Mapping Viewer</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,6 +51,7 @@ pub fn render_full_html(model: &Model, display: &dyn KeyDisplay) -> String {
     </body>
 </html>
 "#,
+        style = style,
         body = fragment
     )
 }
@@ -58,7 +64,12 @@ fn render_layer(
     html: &mut String,
 ) {
     match layer {
-        Layer::Full { name, keys } => {
+        Layer::Full {
+            name,
+            keys,
+            title,
+            desc,
+        } => {
             // pad/truncate to src length
             let cells: Vec<CellContent> = (0..src.keys.len())
                 .map(|i| CellContent {
@@ -66,9 +77,19 @@ fn render_layer(
                     passthrough: false,
                 })
                 .collect();
-            render_keyboard_cells(name, &cells, &src.layout, model, display, html);
+            let meta = SectionMeta {
+                title: title.as_deref(),
+                desc: desc.as_deref(),
+                inherent_name: Some(name.as_str()),
+            };
+            render_keyboard_cells(&cells, &src.layout, &meta, model, display, html);
         }
-        Layer::Sparse { name, map } => {
+        Layer::Sparse {
+            name,
+            map,
+            title,
+            desc,
+        } => {
             let cells: Vec<CellContent> = src
                 .keys
                 .iter()
@@ -86,18 +107,17 @@ fn render_layer(
                     }
                 })
                 .collect();
-            render_keyboard_cells(name, &cells, &src.layout, model, display, html);
+            let meta = SectionMeta {
+                title: title.as_deref(),
+                desc: desc.as_deref(),
+                inherent_name: Some(name.as_str()),
+            };
+            render_keyboard_cells(&cells, &src.layout, &meta, model, display, html);
         }
     }
 }
 
-fn render_keyboard(
-    name: &str,
-    src: &DefSrc,
-    model: &Model,
-    display: &dyn KeyDisplay,
-    html: &mut String,
-) {
+fn render_keyboard(src: &DefSrc, model: &Model, display: &dyn KeyDisplay, html: &mut String) {
     let cells: Vec<CellContent> = src
         .keys
         .iter()
@@ -106,7 +126,12 @@ fn render_keyboard(
             passthrough: false,
         })
         .collect();
-    render_keyboard_cells(name, &cells, &src.layout, model, display, html);
+    let meta = SectionMeta {
+        title: src.title.as_deref(),
+        desc: src.desc.as_deref(),
+        inherent_name: None,
+    };
+    render_keyboard_cells(&cells, &src.layout, &meta, model, display, html);
 }
 
 struct CellContent {
@@ -114,10 +139,18 @@ struct CellContent {
     passthrough: bool,
 }
 
+/// Display metadata extracted from `;; name:` / `;; desc:` comments, bundled
+/// together so `render_keyboard_cells` stays under clippy's argument limit.
+struct SectionMeta<'a> {
+    title: Option<&'a str>,
+    desc: Option<&'a str>,
+    inherent_name: Option<&'a str>,
+}
+
 fn render_keyboard_cells(
-    name: &str,
     cells: &[CellContent],
     layout: &crate::layout::GridLayout,
+    meta: &SectionMeta<'_>,
     model: &Model,
     display: &dyn KeyDisplay,
     html: &mut String,
@@ -126,7 +159,21 @@ fn render_keyboard_cells(
         aliases: &model.aliases,
     };
     html.push_str("<section class=\"keyboard\">");
-    html.push_str(&format!("<h3>{}</h3>", esc(name)));
+    let heading = meta.title.or(meta.inherent_name).unwrap_or("defsrc");
+    html.push_str(&format!("<h3>{}</h3>", esc(heading)));
+    // When a comment title overrides the inherent layer name, show the layer
+    // name as a subtitle so the kanata identifier is not lost.
+    if let (Some(t), Some(iname)) = (meta.title, meta.inherent_name)
+        && t != iname
+    {
+        html.push_str(&format!(
+            "<p class=\"keyboard-subtitle\">{}</p>",
+            esc(iname)
+        ));
+    }
+    if let Some(d) = meta.desc {
+        html.push_str(&format!("<p class=\"keyboard-desc\">{}</p>", esc(d)));
+    }
     html.push_str("<div class=\"grid\">");
 
     for (i, cell) in cells.iter().enumerate() {
