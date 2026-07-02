@@ -1,14 +1,14 @@
 use crate::sexpr::Span;
 
 #[derive(Debug, Clone)]
-pub struct GridCell {
+pub struct GridPos {
     pub row: usize,
     pub col: usize,
 }
 
 #[derive(Debug, Clone)]
 pub struct GridLayout {
-    pub cells: Vec<GridCell>,
+    pub cells: Vec<GridPos>,
     pub n_rows: usize,
     pub n_cols: usize,
 }
@@ -37,7 +37,7 @@ pub fn compute_layout(source: &str, key_spans: &[Span]) -> GridLayout {
     }
 
     // group by row; within each row, sort by char_col and assign consecutive col indices
-    let mut cells_by_index: Vec<Option<GridCell>> = vec![None; key_spans.len()];
+    let mut cells_by_index: Vec<Option<GridPos>> = vec![None; key_spans.len()];
     let mut row_buckets: std::collections::BTreeMap<usize, Vec<(usize, usize)>> =
         std::collections::BTreeMap::new();
     for (i, (r, c)) in positions.iter().enumerate() {
@@ -49,13 +49,13 @@ pub fn compute_layout(source: &str, key_spans: &[Span]) -> GridLayout {
         bucket.sort_by_key(|(c, _)| *c);
         n_cols = n_cols.max(bucket.len());
         for (col, &(_, idx)) in bucket.iter().enumerate() {
-            cells_by_index[idx] = Some(GridCell {
+            cells_by_index[idx] = Some(GridPos {
                 row: positions[idx].0,
                 col,
             });
         }
     }
-    let cells: Vec<GridCell> = cells_by_index.into_iter().map(Option::unwrap).collect();
+    let cells: Vec<GridPos> = cells_by_index.into_iter().map(Option::unwrap).collect();
 
     let n_rows = cells
         .iter()

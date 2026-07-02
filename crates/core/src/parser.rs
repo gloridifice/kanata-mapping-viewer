@@ -18,19 +18,16 @@ pub struct DefSrc {
 }
 
 #[derive(Debug)]
-pub enum Layer {
-    Full {
-        name: String,
-        keys: Vec<String>,
-        title: Option<String>,
-        desc: Option<String>,
-    },
-    Sparse {
-        name: String,
-        map: HashMap<String, String>,
-        title: Option<String>,
-        desc: Option<String>,
-    },
+pub enum LayerVariant {
+    Full { keys: Vec<String> },
+    Sparse { map: HashMap<String, String> },
+}
+
+#[derive(Debug)]
+pub struct Layer {
+    pub name: String,
+    pub meta_info: MetaInfo,
+    pub variant: LayerVariant,
 }
 
 pub fn parse(source: &str, platform: &str) -> Result<Model, ParseError> {
@@ -46,23 +43,24 @@ pub fn parse(source: &str, platform: &str) -> Result<Model, ParseError> {
         if let Sexp::List { items, span } = sexp
             && let Some(Sexp::Atom { text: head, .. }) = items.first()
         {
-            let (title, desc) = extract_meta(source, span.start);
+            let info = extract_meta(source, span.start);
+
             match head.as_str() {
                 "defalias" => collect_aliases(items, source, &mut aliases),
                 "defsrc" => {
                     let (keys, spans) = collect_src(items, source);
                     src_keys = Some(keys);
                     src_spans = Some(spans);
-                    src_title = title;
-                    src_desc = desc;
+                    src_title = info.title;
+                    src_desc = info.desc;
                 }
                 "deflayer" => {
-                    if let Some(layer) = collect_deflayer(items, source, title, desc) {
+                    if let Some(layer) = collect_deflayer(items, source, info) {
                         layers.push(layer);
                     }
                 }
                 "deflayermap" => {
-                    if let Some(layer) = collect_deflayermap(items, source, title, desc) {
+                    if let Some(layer) = collect_deflayermap(items, source, info) {
                         layers.push(layer);
                     }
                 }
@@ -128,24 +126,18 @@ fn collect_src(items: &[Sexp], source: &str) -> (Vec<String>, Vec<crate::sexpr::
     (keys, spans)
 }
 
-fn collect_deflayer(
-    items: &[Sexp],
-    source: &str,
-    title: Option<String>,
-    desc: Option<String>,
-) -> Option<Layer> {
+fn collect_deflayer(items: &[Sexp], source: &str, meta_info: MetaInfo) -> Option<Layer> {
     // (deflayer NAME key key ...)
     let name = items.get(1)?.as_atom()?.to_string();
     let keys: Vec<String> = items.iter().skip(2).map(|s| s.as_text(source)).collect();
-    Some(Layer::Full { name, keys, title, desc })
+    Some(Layer {
+        name,
+        meta_info,
+        variant: LayerVariant::Full { keys },
+    })
 }
 
-fn collect_deflayermap(
-    items: &[Sexp],
-    source: &str,
-    title: Option<String>,
-    desc: Option<String>,
-) -> Option<Layer> {
+fn collect_deflayermap(items: &[Sexp], source: &str, meta_info: MetaInfo) -> Option<Layer> {
     // (deflayermap (NAME) src-key action src-key action ...)
     let name_list = items.get(1)?;
     let name = match name_list {
@@ -162,20 +154,33 @@ fn collect_deflayermap(
         }
         i += 2;
     }
-    Some(Layer::Sparse { name, map, title, desc })
+
+    Some(Layer {
+        name,
+        meta_info,
+        variant: LayerVariant::Sparse { map },
+    })
+}
+
+#[derive(Debug, Default)]
+pub struct MetaInfo {
+    pub title: Option<String>,
+    pub desc: Option<String>,
+    pub deprecate: bool,
 }
 
 /// Extract `;; name: ...` / `;; desc: ...` metadata from `;;` comment lines
 /// immediately preceding the form that starts at `form_start`.
-fn extract_meta(source: &str, form_start: usize) -> (Option<String>, Option<String>) {
+fn extract_meta(source: &str, form_start: usize) -> MetaInfo {
     let prefix = &source[..form_start];
     // Lines strictly above the line containing `form_start`.
     let above = match prefix.rfind('\n') {
         Some(i) => &prefix[..i],
-        None => return (None, None),
+        None => return MetaInfo::default(),
     };
-    let mut title = None;
+    let mut name = None;
     let mut desc = None;
+    let mut deprecate = false;
     for line in above.lines().rev() {
         let trimmed = line.trim_start();
         let rest = match trimmed.strip_prefix(";;") {
@@ -184,16 +189,23 @@ fn extract_meta(source: &str, form_start: usize) -> (Option<String>, Option<Stri
         };
         let rest = rest.trim_start();
         if let Some(val) = rest.strip_prefix("name:") {
-            if title.is_none() {
-                title = Some(val.trim().to_string());
+            if name.is_none() {
+                name = Some(val.trim().to_string());
             }
         } else if let Some(val) = rest.strip_prefix("desc:")
             && desc.is_none()
         {
             desc = Some(val.trim().to_string());
+        } else if rest.starts_with("deprecate") {
+            deprecate = true;
         }
     }
-    (title, desc)
+
+    MetaInfo {
+        title: name,
+        desc,
+        deprecate,
+    }
 }
 
 #[cfg(test)]
@@ -204,67 +216,66 @@ mod tests {
     fn meta_name_and_desc() {
         let src = "(defalias a b)\n\n;; name: Base\n;; desc: hello world\n(deflayer base\n a b)\n";
         let start = src.find("(deflayer base").unwrap();
-        let (title, desc) = extract_meta(src, start);
-        assert_eq!(title.as_deref(), Some("Base"));
-        assert_eq!(desc.as_deref(), Some("hello world"));
+        let info = extract_meta(src, start);
+        assert_eq!(info.title.as_deref(), Some("Base"));
+        assert_eq!(info.desc.as_deref(), Some("hello world"));
     }
 
     #[test]
     fn meta_only_name() {
         let src = ";; name: Game\n(deflayer game x y)\n";
         let start = src.find("(deflayer game").unwrap();
-        let (title, desc) = extract_meta(src, start);
-        assert_eq!(title.as_deref(), Some("Game"));
-        assert_eq!(desc, None);
+        let info = extract_meta(src, start);
+        assert_eq!(info.title.as_deref(), Some("Game"));
+        assert_eq!(info.desc, None);
     }
 
     #[test]
     fn meta_none_when_no_comment() {
         let src = "(defalias a b)\n(deflayer base a b)\n";
         let start = src.find("(deflayer base").unwrap();
-        let (title, desc) = extract_meta(src, start);
-        assert_eq!(title, None);
-        assert_eq!(desc, None);
+        let info = extract_meta(src, start);
+        assert_eq!(info.title, None);
+        assert_eq!(info.desc, None);
     }
 
     #[test]
     fn meta_stops_at_blank_line() {
         let src = ";; name: Ignored\n\n;; name: Real\n(deflayer base a b)\n";
         let start = src.find("(deflayer base").unwrap();
-        let (title, _) = extract_meta(src, start);
-        assert_eq!(title.as_deref(), Some("Real"));
+        let info = extract_meta(src, start);
+        assert_eq!(info.title.as_deref(), Some("Real"));
     }
 
     #[test]
     fn meta_ignores_other_comments() {
-        let src = ";; some note\n;; name: Capital\n;; another note\n;; desc: d\n(deflayer capital a)\n";
+        let src =
+            ";; some note\n;; name: Capital\n;; another note\n;; desc: d\n(deflayer capital a)\n";
         let start = src.find("(deflayer capital").unwrap();
-        let (title, desc) = extract_meta(src, start);
-        assert_eq!(title.as_deref(), Some("Capital"));
-        assert_eq!(desc.as_deref(), Some("d"));
+        let info = extract_meta(src, start);
+        assert_eq!(info.title.as_deref(), Some("Capital"));
+        assert_eq!(info.desc.as_deref(), Some("d"));
     }
 
     #[test]
     fn meta_indented_comments() {
         let src = "  ;; name: Indented\n  (deflayer base a b)\n";
         let start = src.find("(deflayer base").unwrap();
-        let (title, _) = extract_meta(src, start);
-        assert_eq!(title.as_deref(), Some("Indented"));
+        let info = extract_meta(src, start);
+        assert_eq!(info.title.as_deref(), Some("Indented"));
     }
 
     #[test]
     fn parse_captures_layer_meta() {
-        let src = "(defsrc a b c)\n;; name: My Layer\n;; desc: a description\n(deflayer base a b c)\n";
+        let src =
+            "(defsrc a b c)\n;; name: My Layer\n;; desc: a description\n(deflayer base a b c)\n";
         let model = parse(src, "win").unwrap();
         assert_eq!(model.layers.len(), 1);
-        match &model.layers[0] {
-            Layer::Full { name, title, desc, .. } => {
-                assert_eq!(name, "base");
-                assert_eq!(title.as_deref(), Some("My Layer"));
-                assert_eq!(desc.as_deref(), Some("a description"));
-            }
-            other => panic!("expected Full, got {other:?}"),
-        }
+        let layer = &model.layers[0];
+        assert_eq!(layer.name, "base");
+        assert_eq!(layer.meta_info.title.as_deref(), Some("My Layer"));
+        assert_eq!(layer.meta_info.desc.as_deref(), Some("a description"));
+        assert!(matches!(layer.variant, LayerVariant::Full { .. }));
     }
 
     #[test]

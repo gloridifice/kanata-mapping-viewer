@@ -4,7 +4,153 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="./crates/core/assets/style.css">
+        <style>:root {
+  --bg: #1a1a2e;
+  --panel: #2d2d44;
+  --border: #3d3d5c;
+  --text: #e0e0e0;
+  --muted: #666;
+  --accent: #8be9fd;
+  --key-size: 48px;
+  --grid-gap: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 24px;
+}
+
+.viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.keyboard h3 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  text-align: center;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.keyboard-subtitle {
+  margin: 0 0 8px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.keyboard-desc {
+  margin: 0 0 12px;
+  text-align: center;
+  color: var(--text);
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, var(--key-size));
+  grid-template-rows: repeat(auto-fill, var(--key-size));
+  gap: var(--grid-gap);
+  justify-content: center;
+}
+
+.key {
+  background-color: transparent;
+  height: var(--key-size);
+  border: none;
+  border-radius: 0;
+  padding: 8px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  position: relative;
+  overflow: visible;
+  user-select: none;
+  box-shadow: none;
+  transition: filter 0.1s;
+  color: #333;
+}
+
+.key:hover {
+  filter: brightness(0.9);
+}
+
+.key .label {
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: bold;
+}
+
+.key svg {
+  width: var(--key-size);
+  height: var(--key-size);
+}
+
+.key.passthrough {
+  border: none;
+}
+
+.key.alias {
+  color: #3d6d5c;
+  font-weight: bold;
+}
+
+.key.unicode {
+  color: #6d3d5c;
+  font-weight: bold;
+}
+
+.key.sexpr {
+  color: #5d3d6d;
+  font-weight: bold;
+}
+
+.key:hover {
+  z-index: 10;
+}
+
+.key .tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  white-space: pre;
+  max-width: 420px;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.key:hover .tooltip {
+  display: block;
+}
+</style>
         <title>Kanata Mapping Viewer</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -377,7 +523,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Game</h3><p class="keyboard-subtitle">game</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Game</h3><p class="keyboard-subtitle">game</p><p class="keyboard-desc">Press `~` physical key to switch between base and game layer.</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key alias" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -743,7 +889,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Capital</h3><p class="keyboard-subtitle">capital</p><p class="keyboard-desc">press [ then</p><div class="grid"><div class="key alias" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Capital</h3><p class="keyboard-subtitle">capital</p><p class="keyboard-desc">Press `[` physical key to switch between capital and base layer.</p><div class="grid"><div class="key alias" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">@ls-base</span><span class="tooltip">(layer-switch base)</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -926,7 +1072,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Cmd</h3><p class="keyboard-subtitle">lcommand</p><p class="keyboard-desc">Enter osmain-sft layer when press f-d</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Left Command</h3><p class="keyboard-subtitle">lcommand</p><p class="keyboard-desc">Hold `f` physical key to enter command key, `osmain` is an alias, which is `cmd` on mac and `ctrl` on Windows and Linux.</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key alias" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1109,7 +1255,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Cmd</h3><p class="keyboard-subtitle">rcommand</p><p class="keyboard-desc">Enter osmain-sft layer when press f-k</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Right Command</h3><p class="keyboard-subtitle">rcommand</p><p class="keyboard-desc">Hold `k` physical key to enter command key, `osmain` is an alias, which is `cmd` on mac and `ctrl` on Windows and Linux.</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key alias" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1292,7 +1438,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>symbol</h3><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Symbol</h3><p class="keyboard-subtitle">symbol</p><p class="keyboard-desc">Hold `space` physical key to enter command key.</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1436,13 +1582,13 @@
 </svg><span class="label">}</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">]</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">]</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-9</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">(</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-0</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">)</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">`</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1475,7 +1621,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>cn-symbol</h3><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Symbol - Simplified Chinese</h3><p class="keyboard-subtitle">cn-symbol</p><p class="keyboard-desc">Hold `f/j+space` physical keys to enter command key.</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1619,13 +1765,13 @@
 </svg><span class="label">｝</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">】</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">】</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-9</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">（</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-0</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">）</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">·</span></div><div class="key unicode" style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1658,190 +1804,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>symbol-backup</h3><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">esc</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">grv</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">1</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">2</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">3</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">4</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">5</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">6</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">7</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">8</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">9</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">0</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">-</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">=</span></div><div class="key " style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">bspc</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">tab</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-1</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-2</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-3</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-4</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-5</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-6</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-7</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-8</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S--</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">=</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">[</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">]</span></div><div class="key " style="grid-row: 3;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">\</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">caps</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-,</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">-</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-.</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-[</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">[</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-=</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">,</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">.</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">/</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">;</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-'</span></div><div class="key " style="grid-row: 4;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">ret</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">lsft</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">\</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-\</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-/</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-]</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">]</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-9</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-0</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">`</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">S-`</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">'</span></div><div class="key " style="grid-row: 5;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rsft</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">lctl</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">lalt</span></div><div class="key alias" style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">@lang</span><span class="tooltip">(multi lctl spc)</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">bspc</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">ralt</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
-  <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>osmain-sft</h3><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Cmd-Shift</h3><p class="keyboard-subtitle">osmain-sft</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key alias" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -2024,7 +1987,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>osalt</h3><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Alt</h3><p class="keyboard-subtitle">osalt</p><div class="grid"><div class="key " style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key alias" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -2207,7 +2170,7 @@
 </svg><span class="label">rmet</span></div><div class="key " style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>altaction</h3><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Word Move</h3><p class="keyboard-subtitle">altaction</p><p class="keyboard-desc">Hold `e` physical keys to move by word.</p><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key passthrough" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -2390,7 +2353,7 @@
 </svg><span class="label">rmet</span></div><div class="key passthrough" style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>lineaction</h3><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Line Move</h3><p class="keyboard-subtitle">lineaction</p><p class="keyboard-desc">Hold `r` physical keys to move by line.</p><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key passthrough" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -2573,7 +2536,7 @@
 </svg><span class="label">rmet</span></div><div class="key passthrough" style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>fn</h3><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Fn</h3><p class="keyboard-subtitle">fn</p><p class="keyboard-desc">Hold `q` physical key to enter fn layer.</p><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key passthrough" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -2756,7 +2719,7 @@
 </svg><span class="label">rmet</span></div><div class="key passthrough" style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>osmain-fn</h3><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Cmd-Fn</h3><p class="keyboard-subtitle">osmain-fn</p><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key passthrough" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -2939,7 +2902,7 @@
 </svg><span class="label">rmet</span></div><div class="key passthrough" style="grid-row: 6;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
-</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>num</h3><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+</svg><span class="label">rctl</span></div></div></section><section class="keyboard"><h3>Number</h3><p class="keyboard-subtitle">num</p><p class="keyboard-desc">Hold `w` physical key to enter number layer.</p><div class="grid"><div class="key passthrough" style="grid-row: 1;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
   <rect x="5" y="5" width="90" height="90" rx="8" fill="#d0d0d0"/>
   <rect x="16" y="14" width="68" height="68" rx="7" fill="#ffffff"/>
 </svg><span class="label">esc</span></div><div class="key passthrough" style="grid-row: 2;"><svg class="key-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">

@@ -76,6 +76,7 @@
 )
 
 ;; name: Game
+;; desc: Press `~` physical key to switch between base and game layer.
 (deflayer game
   esc      @ls-base 1     2     3     4     5     6     7     8     9     0     -     =     bspc
   tab      q        w     e     r     t     y     u     i     o     p     [     ]     \
@@ -95,7 +96,7 @@
 )
 
 ;; name: Capital
-;; desc: press [ then
+;; desc: Press `[` physical key to switch between capital and base layer.
 (deflayer capital
   @ls-base
   grv      1      2      3      4      5      6      7      8      9      0             S--    =    bspc
@@ -105,8 +106,8 @@
   lctl     lmet   lalt           (multi @ls-base spc)                         ralt   rmet   rctl
 )
 
-;; name: Cmd 
-;; desc: Enter osmain-sft layer when press f-d
+;; name: Left Command
+;; desc: Hold `f` physical key to enter command key, `osmain` is an alias, which is `cmd` on mac and `ctrl` on Windows and Linux. 
 (deflayer lcommand
   esc
   @m_grv  @m_1    @m_2    @m_3    @m_4    @m_5    @m_6    @m_7    @m_8    @m_9    @m_0    @m_-    @m_=    @m_bspc
@@ -116,8 +117,8 @@
   lctl    lalt    @lang           @m-spec-cn-symbol                          ralt    rmet    rctl
 )
 
-;; name: Cmd
-;; desc: Enter osmain-sft layer when press f-k
+;; name: Right Command
+;; desc: Hold `k` physical key to enter command key, `osmain` is an alias, which is `cmd` on mac and `ctrl` on Windows and Linux. 
 (deflayer rcommand
   esc
   @m_grv  @m_1    @m_2    @m_3    @m_4    @m_5    @m_6    @m_7    @m_8    @m_9    @m_0    @m_-    @m_=    @m_bspc
@@ -127,24 +128,29 @@
   lctl    lalt    @lang           @m-spec-cn-symbol                          ralt    rmet    rctl
 )
 
+;; name: Symbol 
+;; desc: Hold `space` physical key to enter command key. 
 (deflayer symbol
   esc
   grv  1      2      3      4      5      6      7      8      9      0      -      =      bspc
   tab  (unicode !)  (unicode @)  (unicode #)  (unicode $)  (unicode %)  (unicode ^)  (unicode &)  (unicode *)  (unicode _)  (unicode =)  (unicode [)       (unicode ])  (unicode \)
   caps (unicode <)  (unicode -)  (unicode >)  (unicode {)  (unicode [)  +            (unicode ,)  (unicode .)  (unicode /)  (unicode ;)  (unicode r#"""#)  ret
-  lsft (unicode \)  (unicode |)  (unicode ?)  (unicode })  (unicode ])  S-9          S-0          (unicode `)  (unicode ~)  (unicode ')  rsft
+  lsft (unicode \)  (unicode |)  (unicode ?)  (unicode })  (unicode ])  (unicode "(")  (unicode ")")  (unicode `)  (unicode ~)  (unicode ')  rsft
   lctl lalt        @lang                        bspc                        ralt       rmet       rctl
 ) 
+
+;; name: Symbol - Simplified Chinese
+;; desc: Hold `f/j+space` physical keys to enter command key. 
 (deflayer cn-symbol
   esc
   grv  1      2      3      4      5      6      7      8      9      0      -      =      bspc
-  tab  (unicode ！)  (unicode @)  (unicode #)  (unicode ￥)  (unicode ％)  (unicode …)  (unicode ＆)  (unicode ＊)  (unicode —)  (unicode ＝)  (unicode 【)       (unicode 】)  (unicode 、)
+  tab  (unicode ！)  (unicode @)  (unicode #)  (unicode ￥)  (unicode ％)  (unicode …)    (unicode ＆)  (unicode ＊)  (unicode —)  (unicode ＝)  (unicode 【)       (unicode 】)  (unicode 、)
   caps (unicode 《)  (unicode －)  (unicode 》)  (unicode ｛)  (unicode 【)  +            (unicode ，)  (unicode 。)  (unicode ／)  (unicode ；)  S-'  ret
-  lsft (unicode 、)  (unicode ｜)  (unicode ？)  (unicode ｝)  (unicode 】)  S-9          S-0          (unicode ·)  (unicode ～)    '             rsft
+  lsft (unicode 、)  (unicode ｜)  (unicode ？)  (unicode ｝)  (unicode 】)  (unicode （)  (unicode ）)   (unicode ·)  (unicode ～)    '             rsft
   lctl lalt        @lang                        bspc                        ralt       rmet       rctl
 )
 
-
+;; deprecate
 (deflayer symbol-backup
   esc
   grv   1      2      3      4      5      6      7      8      9      0      -      =      bspc
@@ -154,7 +160,7 @@
   lctl  lalt   @lang                  bspc                  ralt   rmet   rctl
 )
 
-
+;; name: Cmd-Shift
 (deflayer osmain-sft
   esc
   @ms_grv  @ms_1    @ms_2    @ms_3    @ms_4    @ms_5    @ms_6    @ms_7    @ms_8    @ms_9    @ms_0    @ms_-    @ms_=    @ms_bspc
@@ -164,6 +170,7 @@
   lctl     lalt      @lang           @ms_spc                             ralt  rmet  rctl
 )
 
+;; name: Alt
 (deflayer osalt
   esc
   @a_grv    @a_1     @a_2     @a_3     @a_4     @a_5     @a_6     @a_7     @a_8     @a_9     @a_0     @a_-     @a_=     @a_bspc
@@ -173,7 +180,8 @@
   lctl     lalt      @lang               bspc                              ralt     rmet     rctl
 )
 
-
+;; name: Word Move
+;; desc: Hold `e` physical keys to move by word.
 (deflayermap (altaction)
   h (multi @wordmov left)
   j PageDown
@@ -184,6 +192,8 @@
 
 )
 
+;; name: Line Move
+;; desc: Hold `r` physical keys to move by line.
 (deflayermap (lineaction)
   h @line-begin
   j PageDown
@@ -193,6 +203,8 @@
   spc @remove-to-line-begin
 )
 
+;; name: Fn
+;; desc: Hold `q` physical key to enter fn layer.
 (deflayermap (fn)
   h f10
   m f1
@@ -208,6 +220,7 @@
   [ f12
 )
 
+;; name: Cmd-Fn
 (deflayermap (osmain-fn)
   h (multi @losmain f10)
   m (multi @losmain f1)
@@ -223,6 +236,8 @@
   [ (multi @losmain f12)
 )
 
+;; name: Number
+;; desc: Hold `w` physical key to enter number layer.
 (deflayermap (num)
   h 0
   m 1

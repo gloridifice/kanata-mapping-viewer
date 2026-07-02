@@ -1,4 +1,3 @@
-pub mod display;
 pub mod layout;
 pub mod parser;
 pub mod preprocess;
@@ -6,8 +5,8 @@ pub mod render;
 pub mod sexpr;
 pub mod svgs;
 
-pub use display::{DefaultDisplay, DisplayContext, DisplayResult, KeyDisplay};
-pub use layout::{GridCell, GridLayout};
+pub use render::keyboard::{DefaultKeyDataProcessor, DisplayContext, KeyCell, KeyDataProcessor};
+pub use layout::{GridLayout, GridPos};
 pub use parser::{DefSrc, Layer, Model, parse};
 pub use preprocess::{PreprocessError, preprocess};
 pub use render::{CSS, render_fragment, render_full_html};
@@ -18,7 +17,11 @@ use std::path::Path;
 pub fn render_file(path: &Path, platform: &str, is_dev_mode: bool) -> Result<String, Error> {
     let source = preprocess(path).map_err(Error::Preprocess)?;
     let model = parse(&source, platform).map_err(Error::Parse)?;
-    Ok(render_full_html(&model, &DefaultDisplay, is_dev_mode))
+    Ok(render_full_html(
+        &model,
+        &DefaultKeyDataProcessor,
+        is_dev_mode,
+    ))
 }
 
 #[derive(Debug)]
